@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>إدارة المحل - النسخة السحابية</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 :root{--blue:#1769aa;--green:#198754;--red:#c0392b;--bg:#f3f6fa;--card:#fff;--text:#202936;--border:#dce3ec;--orange:#e58a16}
 *{box-sizing:border-box}
@@ -296,8 +297,8 @@ hr{border:0;border-top:1px solid var(--border);margin:16px 0}
 <script>
 const SUPABASE_URL = 'https://mdvamcntgajaiahqeci.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kdmFtY250Z2FqYWlhcmhxZWNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4Nzc0NjEsImV4cCI6MjEwNzQ1MzQ2MX0.nF36xUGz0cBxXExMCykgRqRr2rxNUlqI1W0HKTm2SWA';
-const { createClient } = supabase;
-const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 
 const $=id=>document.getElementById(id);
 const today=()=>new Date().toISOString().slice(0,10);
