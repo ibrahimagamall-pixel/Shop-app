@@ -139,20 +139,23 @@ input[readonly],input:disabled,select:disabled,textarea:disabled{background:#f0f
 @media(max-width:600px){.app-header{padding:12px 12px 10px}.app-header .header-row{min-height:44px}.app-header h1{font-size:22px}.app-header .menu-toggle{width:42px;height:42px;min-width:42px;font-size:22px}.header-subrow{margin-top:7px}.app-header .header-section{font-size:12px!important;padding:4px 12px}input,select,textarea{min-height:46px;padding:11px 12px!important;border-radius:10px!important}.field{margin:8px 0 12px}.grid-form{gap:9px}}
 
 
-/* Final visual refinement: hide the duplicate section title and harmonize form surfaces */
+/* Dashboard and section palette refinement */
 body{background:#e8edf3!important;color:#263747!important}
 main{background:transparent!important}
 .app-header{background:linear-gradient(125deg,#19354d 0%,#236f73 100%)!important}
 .header-subrow,#currentPageLabel{display:none!important}
-.panel,.card,.auth-panel{background:#fff!important;border-color:#d9e2ea!important}
+/* Dashboard cards and inner section panels use a calm blue-gray; keep input fields white. */
+.panel,.card{background:#dfe7ee!important;border-color:#c8d5e0!important;color:#263747!important}
+.panel h3{color:#183d52!important}
 .sidebar{background:linear-gradient(180deg,#10283d 0%,#153e50 100%)!important;color:#fff!important;border-color:#ffffff20!important}
-.sidebar nav button{background:#f3f6fa!important;color:#263545!important}
-.sidebar nav button.active-nav{background:#1769aa!important;color:#fff!important}
+/* Restore the dark, clear sidebar item styling from version 7. */
+.sidebar nav button{background:linear-gradient(145deg,#25495d,#18384b)!important;color:#fff!important;border:1px solid #31566a!important;border-radius:10px!important}
+.sidebar nav button.active-nav{background:#1769aa!important;color:#fff!important;box-shadow:inset -4px 0 #198754!important}
 input,select,textarea{background:#fff!important;color:#24384a!important;border:1px solid #cbd7e2!important;border-radius:10px!important;box-shadow:inset 0 1px 2px #172b3b08!important}
 input:focus,select:focus,textarea:focus{background:#fff!important;border-color:#398b91!important;box-shadow:0 0 0 3px #398b911c!important}
-.metric{font-size:16px!important;font-weight:700;color:#40576a!important;line-height:1.4}
+.metric{font-size:16px!important;font-weight:700;color:#344e62!important;line-height:1.4}
 label{color:#34495b}
-@media(max-width:600px){main{padding:10px 9px 24px}.panel,.card{background:#fff!important;border-radius:13px!important}.metric{font-size:15px!important}}
+@media(max-width:600px){main{padding:10px 9px 24px}.panel,.card{background:#dfe7ee!important;border-radius:13px!important}.metric{font-size:15px!important}}
 
 </style>
 </head>
@@ -179,6 +182,7 @@ label{color:#34495b}
 <main>
 <section id="home" class="page active">
 <h2>الرئيسية</h2>
+<div id="dashboardCards" class="cards"></div>
 <div class="quick-actions" aria-label="اختصارات سريعة">
 <button class="quick-action green" onclick="showPage('sales')"><span class="quick-icon">🛒</span><span>بيع جديد</span></button>
 <button class="quick-action" onclick="showPage('products')"><span class="quick-icon">📦</span><span>المنتجات</span></button>
@@ -187,7 +191,6 @@ label{color:#34495b}
 <button class="quick-action" onclick="showPage('customers')"><span class="quick-icon">👥</span><span>العملاء والديون</span></button>
 <button class="quick-action" onclick="showPage('reports')"><span class="quick-icon">📊</span><span>التقارير</span></button>
 </div>
-<div id="dashboardCards" class="cards"></div>
 <div class="panel"><h3>تنبيهات المخزون</h3><div id="stockAlerts"></div></div>
 <div class="panel"><h3>الأكثر مبيعًا</h3><div id="topProducts"></div></div>
 <div class="panel"><h3>ملخص الحسابات</h3><div id="accountSummary"></div></div>
