@@ -663,12 +663,28 @@ persist();
 $('purchaseQty').value=1;$('purchasePaid').value=0;$('purchaseMin').value=5;
 refreshAll();alert('تم تسجيل المشتريات وتحديث المخزون');
 }
+function deletePurchase(id){
+if(managerOnly('حذف المشتريات متاح للمدير فقط.'))return;
+const purchase=purchases.find(p=>String(p.id)===String(id));if(!purchase)return;
+const product=productById(purchase.productId);
+if(!product)return alert('لا يمكن حذف المشتريات لأن المنتج المرتبط بها غير موجود.');
+const qty=+(purchase.qty||0);
+if(!Number.isFinite(qty)||qty<=0)return alert('لا يمكن حذف المشتريات بسبب كمية غير صحيحة.');
+if((+product.stock||0)<qty)return alert('لا يمكن حذف هذه المشتريات لأن المخزون الحالي أقل من الكمية المشتراة. راجع حركة المخزون أولًا.');
+if(!confirm('هل تريد حذف المشتريات؟ سيتم خصم الكمية من المخزون وتحديث حساب المورد.'))return;
+const before=+product.stock||0;product.stock=before-qty;
+stockMoves=stockMoves.filter(m=>!(m.type==='شراء'&&String(m.reference)===String(purchase.id)));
+recordStockMove(product,'إلغاء شراء',qty,before,product.stock,'حذف مشتريات رقم '+purchase.id,today(),purchase.id);
+purchases=purchases.filter(p=>String(p.id)!==String(purchase.id));
+persist();refreshAll();alert('تم حذف المشتريات وتحديث المخزون وحساب المورد.');
+}
 function renderPurchases(){
 const from=$('purchaseFrom')?.value||'',to=$('purchaseTo')?.value||'';
 const list=purchases.filter(p=>dateInRange(p.date,from,to)).slice().reverse();
-$('purchasesTable').innerHTML=makeTable(['التاريخ','المورد','المنتج','الكمية','تكلفة الوحدة','الإجمالي','المدفوع','المتبقي','ملاحظات'],list.map(p=>[
+$('purchasesTable').innerHTML=makeTable(['التاريخ','المورد','المنتج','الكمية','تكلفة الوحدة','الإجمالي','المدفوع','المتبقي','ملاحظات','الإجراءات'],list.map(p=>[
 esc(p.date),esc(supplierById(p.supplierId)?.name||'—'),esc(p.productName||productById(p.productId)?.name||'—'),p.qty,
-money(p.cost),money(p.total),money(p.paid),money(Math.max(0,p.total-p.paid)),esc(p.notes||'—')
+money(p.cost),money(p.total),money(p.paid),money(Math.max(0,p.total-p.paid)),esc(p.notes||'—'),
+'<button class="small-btn red" onclick="deletePurchase('+jsArg(p.id)+')">حذف</button>'
 ]));
 }
 function saveStockAdjustment(){
