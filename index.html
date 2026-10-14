@@ -13,7 +13,7 @@ body{margin:0;font-family:Arial,Tahoma,sans-serif;background:var(--bg);color:var
 header{background:var(--blue);color:#fff;padding:18px;text-align:center}
 header h1{margin:0 0 6px;font-size:24px}
 header p{margin:0;font-size:13px}
-nav{display:flex;gap:7px;overflow-x:auto;padding:10px;background:#fff;position:sticky;top:0;z-index:5;box-shadow:0 2px 5px #0001}
+.topbar{display:flex;align-items:center;gap:12px;background:#fff;padding:10px 14px;position:sticky;top:0;z-index:20;box-shadow:0 2px 5px #0001}.menu-toggle{font-size:24px;min-width:48px;background:#1769aa;padding:8px}.current-page-label{font-weight:bold;flex:1}.sidebar-backdrop{position:fixed;inset:0;background:#0007;z-index:29;display:none}.sidebar{position:fixed;top:0;bottom:0;right:0;width:min(310px,86vw);background:#fff;z-index:30;transform:translateX(110%);transition:transform .2s;overflow-y:auto;box-shadow:-4px 0 18px #0002;padding:14px}.sidebar.open{transform:translateX(0)}.sidebar-backdrop.open{display:block}.sidebar-title{font-size:20px;font-weight:bold;padding:12px 8px 18px;border-bottom:1px solid var(--border);margin-bottom:8px}.sidebar nav{display:flex;flex-direction:column;position:static;overflow:visible;padding:0;box-shadow:none;gap:5px}.sidebar nav button{width:100%;text-align:right;background:#f3f6fa;color:#263545;justify-content:flex-start}.sidebar nav button.active-nav{background:#1769aa;color:#fff;box-shadow:inset -4px 0 #198754}.sidebar nav button{white-space:normal}
 nav button{white-space:nowrap}
 button{border:0;border-radius:7px;padding:10px 14px;background:var(--blue);color:#fff;font-weight:bold;cursor:pointer;font-size:14px}
 button:hover{filter:brightness(.94)}
@@ -43,7 +43,7 @@ th{background:#edf3f9;white-space:nowrap}
 .inline{display:flex;gap:8px;align-items:end;flex-wrap:wrap}
 .inline .field{flex:1;min-width:140px}
 hr{border:0;border-top:1px solid var(--border);margin:16px 0}
-.barcode-video{width:100%;max-height:320px;background:#111;border-radius:8px}.pill{display:inline-block;padding:4px 8px;border-radius:20px;background:#edf3f9;font-size:12px}.settings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}@media(max-width:600px){main{padding:9px}header h1{font-size:21px}.card,.panel{padding:12px}.number{font-size:20px}nav{padding:8px}nav button{padding:9px 11px}}
+.barcode-video{width:100%;max-height:320px;background:#111;border-radius:8px}.pill{display:inline-block;padding:4px 8px;border-radius:20px;background:#edf3f9;font-size:12px}.settings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}@media(max-width:600px){.topbar{padding:8px 10px}.current-page-label{font-size:15px}main{padding:9px}header h1{font-size:21px}.card,.panel{padding:12px}.number{font-size:20px}nav{padding:8px}nav button{padding:9px 11px}}
 /* واجهة سهلة للمس على الهاتف والكمبيوتر */
 .quick-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 18px}
 .quick-action{min-height:108px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border-radius:14px;padding:14px 8px;font-size:17px;white-space:normal;box-shadow:0 2px 7px #00000012}
@@ -54,7 +54,7 @@ nav{gap:9px;scrollbar-width:thin}
 nav button{min-height:46px;font-size:15px}
 @media(max-width:600px){.quick-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.quick-action{min-height:100px;font-size:16px;padding:12px 6px}.quick-icon{font-size:28px}header{padding:15px 10px}main{padding:10px}h2{font-size:22px}.grid-form{grid-template-columns:1fr}.actions button{flex:1 1 140px;min-height:48px}}
 @media(min-width:1000px){.quick-actions{grid-template-columns:repeat(6,minmax(0,1fr))}}
-@media print{header,nav,.no-print,button{display:none!important}body{background:#fff}main{max-width:none;padding:0}.page{display:none!important}.page.active{display:block!important}.panel,.card{box-shadow:none;border:0}table{min-width:0}th,td{font-size:11px}}
+@media print{header,nav,.topbar,.sidebar,.sidebar-backdrop,.no-print,button{display:none!important}body{background:#fff}main{max-width:none;padding:0}.page{display:none!important}.page.active{display:block!important}.panel,.card{box-shadow:none;border:0}table{min-width:0}th,td{font-size:11px}}
 </style>
 </head>
 <body>
@@ -72,21 +72,11 @@ nav button{min-height:46px;font-size:15px}
 <div id="authMessage" class="auth-message muted"></div>
 </section>
 <div id="userBar" class="no-print"><span id="signedInAs"></span><span><button class="gray" onclick="syncNow()">مزامنة الآن</button> <button class="red" onclick="signOut()">تسجيل الخروج</button></span></div>
-<nav class="no-print">
-<button onclick="showPage('home')">الرئيسية</button>
-<button onclick="showPage('products')">المنتجات</button>
-<button onclick="showPage('sales')">المبيعات</button>
-<button onclick="showPage('expenses')">المصروفات</button>
-<button onclick="showPage('returns')">المرتجعات</button>
-<button onclick="showPage('customers')">العملاء والديون</button>
-<button onclick="showPage('suppliers')">الموردون</button>
-<button onclick="showPage('purchases')">المشتريات</button>
-<button onclick="showPage('stockMoves')">حركة المخزون</button>
-<button onclick="showPage('reports')">التقارير</button>
-<button onclick="showPage('backup')">النسخ الاحتياطي</button>
-<button onclick="showPage('settings')">إعدادات المحل</button>
-<button onclick="showPage('subscription')">الاشتراك والتجهيز للبيع</button>
-</nav>
+<div class="topbar no-print"><button class="menu-toggle" onclick="toggleSidebar(true)" aria-label="فتح القائمة">☰</button><span id="currentPageLabel" class="current-page-label">الرئيسية</span></div>
+<div id="sidebarBackdrop" class="sidebar-backdrop no-print" onclick="toggleSidebar(false)"></div>
+<aside id="sidebar" class="sidebar no-print" aria-label="القائمة الرئيسية"><div class="sidebar-title">☰ إدارة المحل</div><nav id="mainNavigation">
+<button data-page="home" onclick="showPage('home')">🏠 الرئيسية</button><button data-page="sales" onclick="showPage('sales')">🛒 المبيعات والفواتير</button><button data-page="products" onclick="showPage('products')">📦 المنتجات والمخزون</button><button data-page="purchases" onclick="showPage('purchases')">🚚 المشتريات</button><button data-page="suppliers" onclick="showPage('suppliers')">🏭 الموردون ومستحقاتهم</button><button data-page="supplierPayments" onclick="showPage('supplierPayments')">💳 مدفوعات الموردين</button><button data-page="customers" onclick="showPage('customers')">👥 العملاء والديون</button><button data-page="customerPayments" onclick="showPage('customerPayments')">💰 تحصيلات العملاء</button><button data-page="expenses" onclick="showPage('expenses')">🧾 المصروفات</button><button data-page="returns" onclick="showPage('returns')">↩️ المرتجعات</button><button data-page="stockMoves" onclick="showPage('stockMoves')">📋 حركة المخزون</button><button data-page="reports" onclick="showPage('reports')">📊 التقارير والأرباح</button><button data-page="backup" onclick="showPage('backup')">💾 النسخ الاحتياطي</button><button data-page="settings" onclick="showPage('settings')">⚙️ إعدادات المحل</button><button data-page="subscription" onclick="showPage('subscription')">🧰 الاشتراك والتجهيز</button><button data-page="about" onclick="showPage('about')">ℹ️ من نحن</button><button data-page="support" onclick="showPage('support')">🆘 دعم العملاء</button><button onclick="signOut()">🚪 تسجيل الخروج</button>
+</nav></aside>
 <main>
 <section id="home" class="page active">
 <h2>الرئيسية</h2>
@@ -274,6 +264,7 @@ nav button{min-height:46px;font-size:15px}
 </div>
 </section>
 <section id="reports" class="page">
+<div class="panel no-print"><h3>تقرير سريع</h3><div class="actions"><button onclick="setReportPeriod('today')">تقرير اليوم</button><button onclick="setReportPeriod('week')">آخر 7 أيام</button><button onclick="setReportPeriod('month')">آخر 30 يومًا</button><button class="gray" onclick="clearReportDates()">كل التواريخ</button></div></div>
 <h2>التقارير والأرباح</h2>
 <div class="panel">
 <div class="grid-form">
@@ -312,6 +303,9 @@ nav button{min-height:46px;font-size:15px}
 <div class="panel"><h3>صلاحيات الواجهة</h3><p class="muted">الدور الفعلي يُقرأ من جدول shop_user_roles في Supabase، ولا يمكن تغييره من هذه القائمة.</p><div class="settings-grid"><div class="field"><label>الدور الحالي</label><select id="currentRole" onchange="setCurrentRole(this.value)"><option value="admin">مدير</option><option value="employee">موظف مبيعات</option></select></div></div><div id="roleMessage" class="notice"></div><p class="muted">صلاحيات الموظف تُقرأ من Supabase. الموظف يقرأ المنتجات عبر دالة آمنة ويسجل الفاتورة من خلال الخادم؛ لا يرفع نسخة بيانات كاملة ولا يستطيع تعديل دوره من الواجهة.</p></div>
 </section>
 <section id="subscription" class="page"><h2>الاشتراك والتجهيز للبيع</h2><div class="panel"><h3>حالة الاشتراك</h3><p><span class="pill">وضع تجريبي — غير مربوط بالدفع الإلكتروني</span></p><div id="subscriptionDetails"></div><hr><h3>ما يلزم لتفعيل البيع للعملاء</h3><ul><li>ربط تسجيل الدخول بحسابات Supabase.</li><li>إنشاء جداول للمحلات والمستخدمين والاشتراكات.</li><li>تفعيل سياسات RLS حتى لا يرى كل محل بيانات الآخر.</li><li>ربط بوابة دفع بخادم آمن والتحقق من إشعارات الدفع.</li></ul><p class="notice">لا يمكن تأمين الاشتراكات أو تحصيل الأموال بشكل حقيقي داخل ملف HTML وحده؛ لا تضع مفاتيح سرية أو مفاتيح دفع في هذا الملف.</p><div class="actions"><button onclick="showPage('backup')">النسخ الاحتياطي قبل التحديث</button><button class="gray" onclick="downloadSetupNotes()">تنزيل قائمة تجهيز البيع</button></div></div></section>
+
+<section id="about" class="page"><h2>من نحن</h2><div class="panel"><h3>إدارة المحل</h3><p>تطبيق بسيط لمساعدة أصحاب المحلات على متابعة المبيعات والمخزون والمشتريات والمصروفات والعملاء والموردين والتقارير من مكان واحد.</p><p class="muted">هدفنا تسهيل الاستخدام اليومي وتقليل الأخطاء في تسجيل العمليات.</p></div></section>
+<section id="support" class="page"><h2>دعم العملاء</h2><div class="panel"><h3>محتاج مساعدة؟</h3><p>يمكنك استخدام النسخ الاحتياطي لحفظ بياناتك قبل أي تحديث، والاحتفاظ بنسخة من الملف في مكان آمن.</p><p class="notice">لم يتم تحديد بريد أو رقم رسمي للدعم داخل البرنامج حتى الآن. لن نضع وسيلة تواصل غير مؤكدة.</p><p>عند التواصل مع الدعم، اذكر نوع المشكلة وصورة لها، ولا ترسل كلمة المرور أو مفاتيح Supabase السرية.</p></div></section>
 </main>
 <script>
 const $=id=>document.getElementById(id);
@@ -354,14 +348,15 @@ function makeTable(headers,rows){if(!rows.length)return '<div class="empty">لا
 let authenticatedRole='employee'; // Fail closed until Supabase confirms the role.
 function isEmployeeRole(){return authenticatedRole!=='manager'}
 function managerOnly(message='هذه العملية متاحة للمدير فقط.'){if(!isEmployeeRole())return false;alert(message);return true}
+function toggleSidebar(open){const side=$('sidebar'),back=$('sidebarBackdrop');if(!side||!back)return;side.classList.toggle('open',!!open);back.classList.toggle('open',!!open);document.body.style.overflow=open?'hidden':''}
+const PAGE_LABELS={home:'الرئيسية',sales:'المبيعات والفواتير',products:'المنتجات والمخزون',expenses:'المصروفات',returns:'المرتجعات',customers:'العملاء والديون',customerPayments:'تحصيلات العملاء',suppliers:'الموردون ومستحقاتهم',supplierPayments:'مدفوعات الموردين',purchases:'المشتريات',stockMoves:'حركة المخزون',reports:'التقارير والأرباح',backup:'النسخ الاحتياطي',settings:'إعدادات المحل',subscription:'الاشتراك والتجهيز',about:'من نحن',support:'دعم العملاء'};
 function showPage(id){
-const restricted=['home','products','customers','customerPayments','expenses','suppliers','supplierPayments','purchases','stockMoves','reports','backup','settings','subscription','returns'];
+const restricted=['home','products','customers','customerPayments','expenses','suppliers','supplierPayments','purchases','stockMoves','reports','backup','settings','subscription','returns','about','support'];
 if(isEmployeeRole()&&id!=='sales'){alert('هذه الصفحة متاحة للمدير فقط.');id='sales'}
-const page=$(id);
-if(!page||!page.classList.contains('page'))return;
+const page=$(id);if(!page||!page.classList.contains('page'))return;
 document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
-refreshAll();
-window.scrollTo(0,0);
+document.querySelectorAll('#mainNavigation [data-page]').forEach(b=>b.classList.toggle('active-nav',b.dataset.page===id));
+if($('currentPageLabel'))$('currentPageLabel').textContent=PAGE_LABELS[id]||'إدارة المحل';toggleSidebar(false);refreshAll();window.scrollTo(0,0);
 }
 function options(id,items,placeholder,labelFn,selected=''){
 const el=$(id);if(!el)return;
@@ -702,13 +697,21 @@ recordStockMove(product,'إلغاء شراء',qty,before,product.stock,'حذف �
 purchases=purchases.filter(p=>String(p.id)!==String(purchase.id));
 persist();refreshAll();alert('تم حذف المشتريات وتحديث المخزون وحساب المورد.');
 }
+function payPurchaseBalance(id){
+if(managerOnly('سداد فواتير المشتريات متاح للمدير فقط.'))return;
+const p=purchases.find(x=>String(x.id)===String(id));if(!p)return;
+const due=Math.max(0,(+p.total||0)-(+p.paid||0));if(due<=0)return alert('الفاتورة مدفوعة بالكامل');
+const raw=prompt('المتبقي على الفاتورة '+money(due)+'\nاكتب المبلغ الذي دفعته الآن:');if(raw===null)return;
+const amount=Number(raw);if(!Number.isFinite(amount)||amount<=0)return alert('اكتب مبلغًا صحيحًا أكبر من صفر');if(amount>due)return alert('المبلغ أكبر من المتبقي على الفاتورة');
+p.paid=(+p.paid||0)+amount;p.lastPaymentDate=today();p.paymentNotes=(p.paymentNotes||'')+'\nدفعة '+amount+' بتاريخ '+today();persist();refreshAll();alert('تم تسجيل الدفعة وتحديث المتبقي على الفاتورة.');
+}
 function renderPurchases(){
 const from=$('purchaseFrom')?.value||'',to=$('purchaseTo')?.value||'';
 const list=purchases.filter(p=>dateInRange(p.date,from,to)).slice().reverse();
 $('purchasesTable').innerHTML=makeTable(['التاريخ','المورد','المنتج','الكمية','تكلفة الوحدة','الإجمالي','المدفوع','المتبقي','ملاحظات','الإجراءات'],list.map(p=>[
 esc(p.date),esc(supplierById(p.supplierId)?.name||'—'),esc(p.productName||productById(p.productId)?.name||'—'),p.qty,
 money(p.cost),money(p.total),money(p.paid),money(Math.max(0,p.total-p.paid)),esc(p.notes||'—'),
-'<button class="small-btn red" onclick="deletePurchase('+jsArg(p.id)+')">حذف</button>'
+(Math.max(0,(+p.total||0)-(+p.paid||0))>0?'<button class="small-btn green" onclick="payPurchaseBalance('+jsArg(p.id)+')">دفع المتبقي</button>':'')+'<button class="small-btn red" onclick="deletePurchase('+jsArg(p.id)+')">حذف</button>'
 ]));
 }
 function saveStockAdjustment(){
@@ -773,6 +776,7 @@ const ranking=Object.values(top).sort((a,b)=>b.qty-a.qty);
 $('reportTopProducts').innerHTML=makeTable(['المنتج','صافي الكمية المباعة','صافي قيمة البيع'],ranking.map(x=>[esc(x.name),x.qty,money(x.total)]));
 $('reportExpenses').innerHTML=makeTable(['التاريخ','البند','المبلغ','ملاحظات'],d.ee.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))).map(e=>[esc(e.date),esc(e.name),money(e.amount),esc(e.notes||'—')]));
 }
+function setReportPeriod(period){const end=today(),d=new Date(end+'T12:00:00');if(period==='week')d.setDate(d.getDate()-6);if(period==='month')d.setDate(d.getDate()-29);$('reportFrom').value=d.toISOString().slice(0,10);$('reportTo').value=end;renderReports()}
 function clearReportDates(){$('reportFrom').value='';$('reportTo').value='';renderReports()}
 function renderDashboard(){
 const d=profitData(),stockValue=products.reduce((n,p)=>n+p.stock*p.cost,0);
@@ -881,7 +885,7 @@ function showPasswordRecovery(){passwordRecoveryMode=true;document.body.classLis
 function showLoginForm(){passwordRecoveryMode=false;$('authTitle').textContent='تسجيل الدخول';$('authPassword').closest('.field').hidden=false;$('loginButton').hidden=false;$('signupButton').hidden=false;$('forgotButton').hidden=false;$('recoveryPanel').hidden=true}
 async function sendPasswordReset(){const email=$('authEmail').value.trim();if(!email)return setAuthMessage('اكتب إيميل الموظف أولًا.',true);setAuthBusy(true);try{const {error}=await supabaseClient.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});if(error)throw error;setAuthMessage('تم إرسال رابط الاسترجاع. افتحه من نفس المتصفح؛ يجب أن تظهر صفحة تعيين كلمة مرور جديدة.');}catch(e){setAuthMessage('تعذر إرسال رابط الاسترجاع: '+(e.message||''),true)}finally{setAuthBusy(false)}}
 async function saveNewPassword(){const password=$('newPassword').value;if(!password||password.length<6)return setAuthMessage('كلمة المرور يجب ألا تقل عن 6 أحرف.',true);const b=$('saveNewPasswordButton');b.disabled=true;try{const {error}=await supabaseClient.auth.updateUser({password});if(error)throw error;await supabaseClient.auth.signOut();showLoggedOutUI();showLoginForm();setAuthMessage('تم تغيير كلمة المرور. سجّل الدخول بالكلمة الجديدة.')}catch(e){setAuthMessage('تعذر تغيير كلمة المرور: '+(e.message||'افتح رابط الاسترجاع الجديد.'))}finally{b.disabled=false}}
-function showAuthenticatedUI(user){currentUser=user;document.body.classList.remove('auth-locked');$('authPanel').hidden=true;$('userBar').classList.add('visible');$('signedInAs').textContent='الحساب: '+(user.email||'مستخدم مسجل');setAuthMessage('')}
+function showAuthenticatedUI(user){currentUser=user;document.body.classList.remove('auth-locked');$('authPanel').hidden=true;$('userBar').classList.add('visible');$('signedInAs').textContent='تم تسجيل الدخول';setAuthMessage('')}
 function showLoggedOutUI(){currentUser=null;authenticatedRole='employee';syncReady=false;syncBusy=false;syncQueued=false;document.body.classList.add('auth-locked');$('authPanel').hidden=false;$('userBar').classList.remove('visible');showLoginForm();setAuthMessage('')}
 async function signIn(){const email=$('authEmail').value.trim(),password=$('authPassword').value;if(!email||!password)return setAuthMessage('أدخل البريد الإلكتروني وكلمة المرور.',true);setAuthBusy(true);setAuthMessage('جارٍ تسجيل الدخول...');try{const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)throw error;await openUserSession(data.user)}catch(e){setAuthMessage('تعذر تسجيل الدخول: '+(e.message||'تحقق من البيانات والاتصال.'),true)}finally{setAuthBusy(false)}}
 async function signUp(){const email=$('authEmail').value.trim(),password=$('authPassword').value;if(!email||!password)return setAuthMessage('أدخل البريد الإلكتروني وكلمة المرور.',true);if(password.length<6)return setAuthMessage('كلمة المرور يجب ألا تقل عن 6 أحرف.',true);setAuthBusy(true);setAuthMessage('جارٍ إنشاء الحساب...');try{const {data,error}=await supabaseClient.auth.signUp({email,password});if(error)throw error;if(data.session&&data.user){await openUserSession(data.user)}else setAuthMessage('تم إرسال طلب إنشاء الحساب. افتح رسالة تأكيد البريد إن وصلتك، ثم سجّل الدخول.')}catch(e){setAuthMessage('تعذر إنشاء الحساب: '+(e.message||'تحقق من البيانات والاتصال.'),true)}finally{setAuthBusy(false)}}
