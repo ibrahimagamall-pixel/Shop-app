@@ -1060,11 +1060,15 @@ startAuthApp();
 </body>
 </html>
 <style>
-/* Slightly darker data-entry fields while keeping text readable */
+/* Keep data-entry fields white; darken only the surrounding section surfaces */
 input:not([type="checkbox"]):not([type="radio"]), select, textarea {
-  background: #d3dde6 !important;
-  border-color: #aebfcd !important;
+  background: #ffffff !important;
+  border-color: #c3ced8 !important;
   color: #172b3a !important;
+}
+.panel {
+  background: #cbd7e1 !important;
+  border-color: #b4c3cf !important;
 }
 /* Highlight the first two dashboard totals */
 #dashboardCards .card {
