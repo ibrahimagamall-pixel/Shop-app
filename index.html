@@ -93,8 +93,8 @@ header p{position:relative;z-index:1;color:#e3f2f1;margin:3px 0}
 <div id="userBar" class="no-print"><span id="signedInAs"></span></div>
 <div class="topbar no-print"><button class="menu-toggle" onclick="toggleSidebar(true)" aria-label="فتح القائمة">☰</button><span id="currentPageLabel" class="current-page-label">الرئيسية</span></div>
 <div id="sidebarBackdrop" class="sidebar-backdrop no-print" onclick="toggleSidebar(false)"></div>
-<aside id="sidebar" class="sidebar no-print" aria-label="القائمة الرئيسية"><div class="sidebar-title">☰ إدارة المحل</div><nav id="mainNavigation">
-<button data-page="home" onclick="showPage('home')">🏠 الرئيسية</button><button data-page="sales" onclick="showPage('sales')">🛒 المبيعات والفواتير</button><button data-page="products" onclick="showPage('products')">📦 المنتجات والمخزون</button><button data-page="purchases" onclick="showPage('purchases')">🚚 المشتريات</button><button data-page="suppliers" onclick="showPage('suppliers')">🏭 الموردون ومستحقاتهم</button><button data-page="supplierPayments" onclick="showPage('supplierPayments')">💳 مدفوعات الموردين</button><button data-page="customers" onclick="showPage('customers')">👥 العملاء والديون</button><button data-page="customerPayments" onclick="showPage('customerPayments')">💰 تحصيلات العملاء</button><button data-page="expenses" onclick="showPage('expenses')">🧾 المصروفات</button><button data-page="returns" onclick="showPage('returns')">↩️ المرتجعات</button><button data-page="stockMoves" onclick="showPage('stockMoves')">📋 حركة المخزون</button><button data-page="reports" onclick="showPage('reports')">📊 التقارير والأرباح</button><button data-page="backup" onclick="showPage('backup')">💾 النسخ الاحتياطي</button><button data-page="settings" onclick="showPage('settings')">⚙️ إعدادات المحل</button><button type="button" data-action="sync" onclick="syncNow()">🔄 مزامنة الآن</button><button data-page="subscription" onclick="showPage('subscription')">🧰 الاشتراك والتجهيز</button><button data-page="about" onclick="showPage('about')">ℹ️ من نحن</button><button data-page="support" onclick="showPage('support')">🆘 دعم العملاء</button><button onclick="signOut()">🚪 تسجيل الخروج</button>
+<aside id="sidebar" class="sidebar no-print" aria-label="القائمة الرئيسية"><div class="sidebar-title">☰ إدارة المحل</div><nav id="mainNavigation" aria-label="القائمة الرئيسية">
+<button data-page="home" onclick="showPage('home')">🏠 الرئيسية</button><button data-page="sales" onclick="showPage('sales')">🛒 المبيعات والفواتير</button><button data-page="products" onclick="showPage('products')">📦 المنتجات والمخزون</button><button data-page="purchases" onclick="showPage('purchases')">🚚 المشتريات</button><button data-page="suppliers" onclick="showPage('suppliers')">🏭 الموردون ومستحقاتهم</button><button data-page="customers" onclick="showPage('customers')">👥 العملاء والديون</button><button data-page="expenses" onclick="showPage('expenses')">🧾 المصروفات</button><button data-page="returns" onclick="showPage('returns')">↩️ المرتجعات</button><button data-page="stockMoves" onclick="showPage('stockMoves')">📋 حركة المخزون</button><button data-page="reports" onclick="showPage('reports')">📊 التقارير والأرباح</button><button data-page="backup" onclick="showPage('backup')">💾 النسخ الاحتياطي</button><button data-page="settings" onclick="showPage('settings')">⚙️ إعدادات المحل</button><button type="button" data-action="sync" onclick="syncNow()">🔄 مزامنة الآن</button><button data-page="subscription" onclick="showPage('subscription')">🧰 الاشتراك والتجهيز</button><button data-page="about" onclick="showPage('about')">ℹ️ من نحن</button><button data-page="support" onclick="showPage('support')">🆘 دعم العملاء</button><button onclick="signOut()">🚪 تسجيل الخروج</button>
 </nav></aside>
 <main>
 <section id="home" class="page active">
@@ -379,8 +379,8 @@ if(isEmployeeRole()&&id!=='sales'){alert('هذه الصفحة متاحة للم�
 const page=$(id);if(!page||!page.classList.contains('page'))return;
 document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
 document.querySelectorAll('#mainNavigation [data-page]').forEach(b=>b.classList.toggle('active-nav',b.dataset.page===requested||(requested==='customerPayments'&&b.dataset.page==='customerPayments')||(requested==='supplierPayments'&&b.dataset.page==='supplierPayments')||(requested==='customers'&&b.dataset.page==='customers')||(requested==='suppliers'&&b.dataset.page==='suppliers')));
-if($('currentPageLabel'))$('currentPageLabel').textContent=PAGE_LABELS[requested]||PAGE_LABELS[id]||'إدارة المحل';
-try{localStorage.setItem('shopAppLastPage',requested)}catch{}
+if($('currentPageLabel'))$('currentPageLabel').textContent=PAGE_LABELS[id]||'إدارة المحل';
+try{localStorage.setItem('shopAppLastPage',id);localStorage.setItem('shopAppLastPageAt',String(Date.now()))}catch{}
 toggleSidebar(false);refreshAll();
 if(requested==='customerPayments'||requested==='supplierPayments'){const target=$(requested==='customerPayments'?'customerPaymentPanel':'supplierPaymentPanel');if(target)setTimeout(()=>target.scrollIntoView({behavior:'smooth',block:'start'}),50)}else window.scrollTo(0,0);
 }
@@ -945,6 +945,13 @@ async function startAuthApp(){document.body.classList.add('auth-locked');const r
 // توحيد الأرقام الظاهرة إلى الإنجليزية دون تغيير قيم حقول الإدخال.
 function latinizeVisibleDigits(root=document.body){const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;while((n=walker.nextNode())){if(/[٠-٩۰-۹]/.test(n.nodeValue))n.nodeValue=n.nodeValue.replace(/[٠-٩۰-۹]/g,ch=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(ch)>=0?'٠١٢٣٤٥٦٧٨٩'.indexOf(ch):'۰۱۲۳۴۵۶۷۸۹'.indexOf(ch)));}}
 const digitObserver=new MutationObserver(()=>latinizeVisibleDigits());document.addEventListener('DOMContentLoaded',()=>{latinizeVisibleDigits();digitObserver.observe(document.body,{subtree:true,childList:true,characterData:true});});
+
+
+// حفظ القسم الحالي واستعادته عند تحديث المتصفح أو العودة للتبويب.
+function saveCurrentPageForRefresh(){const active=document.querySelector('.page.active');if(active&&active.id){try{localStorage.setItem('shopAppLastPage',active.id);localStorage.setItem('shopAppLastPageAt',String(Date.now()))}catch{}}}
+window.addEventListener('pagehide',saveCurrentPageForRefresh);
+window.addEventListener('beforeunload',saveCurrentPageForRefresh);
+window.addEventListener('pageshow',()=>{if(!document.body.classList.contains('auth-locked')){let id='';try{id=localStorage.getItem('shopAppLastPage')||''}catch{}if(id&&$(id)?.classList.contains('page')&&!$(id).classList.contains('active'))showPage(id)}});
 
 window.addEventListener('online',()=>{if(currentUser&&syncReady)uploadCloudData()});
 
