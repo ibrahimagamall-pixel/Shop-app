@@ -191,6 +191,7 @@ label{color:#34495b}
 <button class="quick-action" onclick="showPage('customers')"><span class="quick-icon">👥</span><span>العملاء والديون</span></button>
 <button class="quick-action" onclick="showPage('reports')"><span class="quick-icon">📊</span><span>التقارير</span></button>
 </div>
+<div id="dashboardOtherCards" class="cards dashboard-other-cards"></div>
 <div class="panel"><h3>تنبيهات المخزون</h3><div id="stockAlerts"></div></div>
 <div class="panel"><h3>الأكثر مبيعًا</h3><div id="topProducts"></div></div>
 <div class="panel"><h3>ملخص الحسابات</h3><div id="accountSummary"></div></div>
@@ -891,12 +892,15 @@ function clearReportDates(){$('reportFrom').value='';$('reportTo').value='';rend
 function renderDashboard(){
 const d=profitData(),stockValue=products.reduce((n,p)=>n+p.stock*p.cost,0);
 const customerDue=customers.reduce((n,c)=>n+customerDebt(c),0),supplierDue=suppliers.reduce((n,s)=>n+supplierDebt(s),0);
-$('dashboardCards').innerHTML=[
+const dashboardMetrics=[
 ['المصروفات العامة',money(d.expenseTotal)],['صافي الربح التقديري',money(d.profit)],
 ['صافي المبيعات',money(d.netRevenue)],['تكلفة البضاعة المباعة',money(d.netCost)],
 ['عدد المنتجات',products.length],['قيمة المخزون بالتكلفة',money(stockValue)],
 ['ديون العملاء',money(customerDue)],['مستحقات الموردين',money(supplierDue)]
-].map((x,i)=>'<div class="card"><div class="metric">'+x[0]+'</div><div class="number '+(i===1?(d.profit>=0?'green-text':'red-text'):'')+'">'+x[1]+'</div></div>').join('');
+];
+const dashboardCardHTML=(x,i)=>'<div class="card"><div class="metric">'+x[0]+'</div><div class="number '+(i===1?(d.profit>=0?'green-text':'red-text'):'')+'">'+x[1]+'</div></div>';
+$('dashboardCards').innerHTML=dashboardMetrics.slice(0,2).map(dashboardCardHTML).join('');
+$('dashboardOtherCards').innerHTML=dashboardMetrics.slice(2).map((x,i)=>dashboardCardHTML(x,i+2)).join('');
 const low=products.filter(p=>p.stock<=p.min);
 $('stockAlerts').innerHTML=low.length?makeTable(['المنتج','المخزون الحالي','حد التنبيه','المطلوب'],low.map(p=>[esc(p.name),p.stock,p.min,Math.max(0,p.min*2-p.stock)])):'<div class="notice success">لا توجد منتجات وصلت إلى حد النقص.</div>';
 const ranked={};
@@ -1055,3 +1059,45 @@ startAuthApp();
 </script>
 </body>
 </html>
+<style>
+/* Slightly darker data-entry fields while keeping text readable */
+input:not([type="checkbox"]):not([type="radio"]), select, textarea {
+  background: #d3dde6 !important;
+  border-color: #aebfcd !important;
+  color: #172b3a !important;
+}
+/* Highlight the first two dashboard totals */
+#dashboardCards .card {
+  background: linear-gradient(135deg,#c6dce8,#dce8ef) !important;
+  border: 1px solid #8eafc3 !important;
+  box-shadow: 0 3px 10px #29485b16;
+}
+.quick-actions .quick-action { color:#fff !important; border:0 !important; box-shadow:0 3px 9px #142d3c22; }
+.quick-actions .quick-action.green { background:linear-gradient(135deg,#147d69,#0f5e58) !important; }
+.quick-actions .quick-action:not(.green):not(.orange):not(.gray) { background:linear-gradient(135deg,#286c9d,#214e79) !important; }
+.quick-actions .quick-action.orange { background:linear-gradient(135deg,#c77725,#a95719) !important; }
+.quick-actions .quick-action.gray { background:linear-gradient(135deg,#687c8d,#4a5d6c) !important; }
+#dashboardOtherCards .card { background:#d4e0e9 !important; border:1px solid #b0c3d1 !important; }
+/* Compact report date fields */
+#reports #reportFrom, #reports #reportTo { max-width: 185px; padding:7px 9px; min-height:36px; font-size:14px; }
+#reports .grid-form { grid-template-columns: repeat(2,minmax(130px,185px)); gap:10px; }
+/* Distinct color for report totals from sales through estimated net profit */
+#reportCards .card { background:linear-gradient(135deg,#d0e2ed,#bcd5e4) !important; border:1px solid #8fb2c8 !important; box-shadow:0 3px 10px #29485b16; }
+#reportCards .card:nth-child(2) { background:linear-gradient(135deg,#f2d8d5,#eac3be) !important; border-color:#d6a29d !important; }
+#reportCards .card:nth-child(3) { background:linear-gradient(135deg,#cce8df,#b3d9cb) !important; border-color:#91bfae !important; }
+#reportCards .card:nth-child(4) { background:linear-gradient(135deg,#e1d9f0,#cec1e5) !important; border-color:#b4a3d1 !important; }
+#reportCards .card:nth-child(5) { background:linear-gradient(135deg,#f1e4c8,#e8d5aa) !important; border-color:#d4bd8d !important; }
+#reportCards .card:nth-child(6) { background:linear-gradient(135deg,#c8e5d2,#a9d5bb) !important; border-color:#8ab99f !important; }
+@media(max-width:600px){ #reports .grid-form{grid-template-columns:repeat(2,minmax(0,1fr));} #reports #reportFrom,#reports #reportTo{width:100%;max-width:100%;font-size:13px;padding:6px;} }
+</style>
+
+<style>
+/* Final correction: keep data-entry controls white; darken only the surrounding section surfaces. */
+input:not([type="checkbox"]):not([type="radio"]), select, textarea {
+  background: #ffffff !important;
+  border-color: #aebfcd !important;
+  color: #172b3a !important;
+}
+.panel { background: #d0dbe4 !important; border-color: #b9c9d5 !important; }
+/* Leave the three-line navigation menu and its items unchanged. */
+</style>
