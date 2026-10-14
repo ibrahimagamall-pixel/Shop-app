@@ -117,12 +117,33 @@ button{border-radius:10px;font-weight:700;box-shadow:0 2px 6px #17364c10;transit
 .auth-panel{border-radius:16px;box-shadow:0 8px 28px #17364c0d}
 @media(max-width:600px){header{padding:15px 13px}.topbar{padding:8px 10px}.current-page-label{font-size:15px}main{padding:10px 9px 24px}.page>h2{padding:12px 13px;margin-bottom:12px}.panel,.card{padding:12px;border-radius:13px}.panel h3{font-size:16px}.grid-form{grid-template-columns:minmax(0,1fr)}.inline{flex-wrap:wrap}.inline .field{min-width:100%}.actions button{flex:1 1 135px}.table-wrap{border-radius:10px}th,td{padding:9px 10px}}
 
+
+/* تصميم موحّد ومحسّن للهيدر والخانات - مبني على النسخة الثامنة */
+.app-header{padding:14px 16px 12px;background:linear-gradient(125deg,#142f46 0%,#176b70 100%);border-bottom:3px solid #d6a84f;text-align:center;box-shadow:0 5px 18px #142f461c;overflow:hidden}
+.app-header .header-row{min-height:46px;display:flex;align-items:center;justify-content:center;position:relative}
+.app-header h1{margin:0!important;color:#fff;font-size:clamp(22px,3vw,29px);font-weight:800;letter-spacing:.1px;line-height:1.35}
+.app-header .menu-toggle{position:absolute;right:0;top:50%;transform:translateY(-50%);width:46px;height:44px;min-width:46px;padding:0;border:1px solid #ffffff30;border-radius:13px;background:#ffffff16;color:#fff;font-size:24px;box-shadow:0 3px 10px #061c2b25}
+.app-header .menu-toggle:hover{background:#ffffff25;filter:none}
+.header-subrow{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;margin:8px auto 0;min-height:26px}
+.app-header .header-section{display:block!important;margin:0!important;padding:4px 13px;border:1px solid #ffffff2a;border-radius:999px;background:#ffffff12;color:#f4fbfb!important;font-size:13px!important;font-weight:700;line-height:1.4;opacity:1}
+.app-header #activeShopLabel{display:none!important}
+/* خانات كتابة مريحة ومتناسقة */
+input,select,textarea{background:#fff!important;color:#24384a!important;border:1px solid #d4dee7!important;border-radius:11px!important;padding:11px 13px!important;min-height:46px;box-shadow:inset 0 1px 2px #172b3b08;transition:border-color .15s ease,box-shadow .15s ease}
+input::placeholder,textarea::placeholder{color:#93a1ad;opacity:1}
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:#398b91!important;box-shadow:0 0 0 3px #398b911c!important}
+input[readonly],input:disabled,select:disabled,textarea:disabled{background:#f0f4f7!important;color:#617282!important}
+.field{gap:6px;margin:9px 0 13px}
+.field label,label{color:#3d5669;font-size:13px;font-weight:700}
+.grid-form{gap:13px}
+.panel,.card{border-color:#e0e8ee;box-shadow:0 5px 18px #19364a0a}
+@media(max-width:600px){.app-header{padding:12px 12px 10px}.app-header .header-row{min-height:44px}.app-header h1{font-size:22px}.app-header .menu-toggle{width:42px;height:42px;min-width:42px;font-size:22px}.header-subrow{margin-top:7px}.app-header .header-section{font-size:12px!important;padding:4px 12px}input,select,textarea{min-height:46px;padding:11px 12px!important;border-radius:10px!important}.field{margin:8px 0 12px}.grid-form{gap:9px}}
+
 </style>
 </head>
 <body>
-<header>
+<header class="app-header">
 <div class="header-row"><button class="menu-toggle" onclick="toggleSidebar(true)" aria-label="فتح القائمة">☰</button><h1>إدارة المحل</h1></div>
-<p id="currentPageLabel" class="header-section">الرئيسية</p><p id="activeShopLabel" style="margin-top:5px;font-weight:bold"></p>
+<div class="header-subrow"><p id="currentPageLabel" class="header-section">الرئيسية</p><p id="activeShopLabel" style="margin-top:5px;font-weight:bold"></p></div>
 </header>
 <section id="authPanel" class="auth-panel no-print" hidden>
 <h2 id="authTitle">تسجيل الدخول</h2>
