@@ -113,7 +113,7 @@ button{border-radius:10px;font-weight:700;box-shadow:0 2px 6px #17364c10;transit
 .grid-form{gap:12px 14px}.inline{gap:12px;align-items:end}
 .table-wrap{border:1px solid #e0e8ee;border-radius:12px;overflow:auto;background:#fff}table{border-collapse:separate;border-spacing:0;width:100%;min-width:520px}th{background:#edf4f6;color:#234356;font-size:13px;font-weight:800;position:sticky;top:0}th,td{padding:11px 12px;border-bottom:1px solid #e9eef2;text-align:right;vertical-align:middle}tbody tr:nth-child(even){background:#fafcfd}tbody tr:hover{background:#f0f8f8}tbody tr:last-child td{border-bottom:0}
 .cards{gap:12px}.number{font-weight:800;color:#17364c}.muted,.empty{color:#708292}.empty{padding:18px;text-align:center;background:#f8fafb;border:1px dashed #d5e0e7;border-radius:12px}
-.quick-actions{gap:12px}.quick-action{border:1px solid #dce7ec;border-radius:15px;background:linear-gradient(145deg,#fff,#f4f8fa);color:#17364c;box-shadow:0 5px 16px #17364c09}.quick-action .quick-icon{display:block;margin-bottom:9px}.quick-action.green{background:linear-gradient(145deg,#e7f7f0,#fff);border-color:#c8e8da}.quick-action.orange{background:linear-gradient(145deg,#fff5e5,#fff);border-color:#f0dfc2}
+.quick-actions{gap:12px}.quick-action{border:1px solid #244b60;border-radius:15px;background:linear-gradient(145deg,#25495d,#18384b);color:#fff;box-shadow:0 5px 14px #19364a18}.quick-action .quick-icon{display:block;margin-bottom:9px}.quick-action.green{background:linear-gradient(145deg,#23775e,#155744);border-color:#1b6a53;color:#fff}.quick-action.orange{background:linear-gradient(145deg,#9a641c,#744710);border-color:#885718;color:#fff}.quick-action.gray{background:linear-gradient(145deg,#526274,#374657);border-color:#435366;color:#fff}.quick-action:hover{filter:brightness(1.08)}
 .auth-panel{border-radius:16px;box-shadow:0 8px 28px #17364c0d}
 @media(max-width:600px){header{padding:15px 13px}.topbar{padding:8px 10px}.current-page-label{font-size:15px}main{padding:10px 9px 24px}.page>h2{padding:12px 13px;margin-bottom:12px}.panel,.card{padding:12px;border-radius:13px}.panel h3{font-size:16px}.grid-form{grid-template-columns:minmax(0,1fr)}.inline{flex-wrap:wrap}.inline .field{min-width:100%}.actions button{flex:1 1 135px}.table-wrap{border-radius:10px}th,td{padding:9px 10px}}
 
@@ -144,11 +144,15 @@ body{background:#e8edf3!important;color:#263747!important}
 main{background:transparent!important}
 .app-header{background:linear-gradient(125deg,#19354d 0%,#236f73 100%)!important}
 .header-subrow,#currentPageLabel{display:none!important}
-.panel,.card,.auth-panel,.sidebar{background:#fff!important;border-color:#d9e2ea!important}
+.panel,.card,.auth-panel{background:#fff!important;border-color:#d9e2ea!important}
+.sidebar{background:linear-gradient(180deg,#10283d 0%,#153e50 100%)!important;color:#fff!important;border-color:#ffffff20!important}
+.sidebar nav button{background:#f3f6fa!important;color:#263545!important}
+.sidebar nav button.active-nav{background:#1769aa!important;color:#fff!important}
 input,select,textarea{background:#fff!important;color:#24384a!important;border:1px solid #cbd7e2!important;border-radius:10px!important;box-shadow:inset 0 1px 2px #172b3b08!important}
 input:focus,select:focus,textarea:focus{background:#fff!important;border-color:#398b91!important;box-shadow:0 0 0 3px #398b911c!important}
+.metric{font-size:16px!important;font-weight:700;color:#40576a!important;line-height:1.4}
 label{color:#34495b}
-@media(max-width:600px){main{padding:10px 9px 24px}.panel,.card{background:#fff!important;border-radius:13px!important}}
+@media(max-width:600px){main{padding:10px 9px 24px}.panel,.card{background:#fff!important;border-radius:13px!important}.metric{font-size:15px!important}}
 
 </style>
 </head>
@@ -885,11 +889,11 @@ function renderDashboard(){
 const d=profitData(),stockValue=products.reduce((n,p)=>n+p.stock*p.cost,0);
 const customerDue=customers.reduce((n,c)=>n+customerDebt(c),0),supplierDue=suppliers.reduce((n,s)=>n+supplierDebt(s),0);
 $('dashboardCards').innerHTML=[
-['صافي المبيعات',money(d.netRevenue)],['تكلفة البضاعة المباعة',money(d.netCost)],
 ['المصروفات العامة',money(d.expenseTotal)],['صافي الربح التقديري',money(d.profit)],
+['صافي المبيعات',money(d.netRevenue)],['تكلفة البضاعة المباعة',money(d.netCost)],
 ['عدد المنتجات',products.length],['قيمة المخزون بالتكلفة',money(stockValue)],
 ['ديون العملاء',money(customerDue)],['مستحقات الموردين',money(supplierDue)]
-].map((x,i)=>'<div class="card"><div class="metric">'+x[0]+'</div><div class="number '+(i===3?(d.profit>=0?'green-text':'red-text'):'')+'">'+x[1]+'</div></div>').join('');
+].map((x,i)=>'<div class="card"><div class="metric">'+x[0]+'</div><div class="number '+(i===1?(d.profit>=0?'green-text':'red-text'):'')+'">'+x[1]+'</div></div>').join('');
 const low=products.filter(p=>p.stock<=p.min);
 $('stockAlerts').innerHTML=low.length?makeTable(['المنتج','المخزون الحالي','حد التنبيه','المطلوب'],low.map(p=>[esc(p.name),p.stock,p.min,Math.max(0,p.min*2-p.stock)])):'<div class="notice success">لا توجد منتجات وصلت إلى حد النقص.</div>';
 const ranked={};
